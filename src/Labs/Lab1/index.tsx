@@ -114,7 +114,7 @@ tag to tell browsers to render the gaps.
             </tr>
             <tr>
               <td>Q5</td>
-              <td>State & Redux</td>
+              <td>State and Redux</td>
               <td>3/19/21</td>
               <td>85</td>
             </tr>
