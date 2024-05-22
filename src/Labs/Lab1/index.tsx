@@ -285,6 +285,10 @@ tag to tell browsers to render the gaps.
       <a id="wd-lipsum" href="https://www.lipsum.com">click here</a>
       to get dummy text<br/>
 
+      Checkout my
+      <a id="wd-github" href="https://github.com/mabdulam/kanbas-react-web-app/tree/a1">Github</a>
+      <br/>
+
     </div>
   );
 }
