@@ -7,7 +7,7 @@ import "./styles.css";
 export default function Kanbas() {
   return (
     <div id="wd-kanbas" className="h-100">
-      <div className="d-flex h-100">
+      <div className="d-flex">
         <div className="d-none d-md-block bg-black">
           <KanbasNavigation />
         </div>
@@ -16,7 +16,7 @@ export default function Kanbas() {
             <Route path="/" element={<Navigate to="Dashboard" />} />
             <Route path="/Account" element={<h2>Account</h2>} />
             <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/Courses/:id/*" element={<Courses />} />
+            <Route path="/Courses/:cid/*" element={<Courses />} />
             <Route path="/Calendar" element={<h2>Calendar</h2>} />
             <Route path="/Inbox" element={<h2>Inbox</h2>} />
           </Routes>
