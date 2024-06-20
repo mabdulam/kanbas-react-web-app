@@ -2,8 +2,14 @@ import ApplyFilterButton from './ApplyFilterButton';
 import SearchBars from './SearchBars';
 import ImportExportButtons from './ImportExportButtons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useParams } from "react-router-dom";
+import { assignments, enrollments, users, grades } from "../../Database"; 
 
 export default function Grades() {
+  const { cid } = useParams();
+  const assignmentList = assignments.filter((assignment) => assignment.course === cid); 
+  const enrollmentList = enrollments.filter((enrollment) => enrollment.course === cid); 
+  
   return (
     <div>
       <ImportExportButtons />
@@ -14,57 +20,30 @@ export default function Grades() {
           <thead>
             <tr>
               <th className="col-1">Student Name</th>
-              <th className="col-1">A1 SETUP<br />Out of 100</th>
-              <th className="col-1">A2 HTML<br />Out of 100</th>
-              <th className="col-1">A3 CSS<br />Out of 100</th>
-              <th className="col-1">A4 BOOTSTRAP<br />Out of 100</th>
+              {assignmentList.map((assignmentItem) => (
+                <th className="col-1" key={assignmentItem._id}>{assignmentItem.title}<br />Out of {assignmentItem.pts}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="text-danger">Jane Adams</td>
-              <td>100%</td>
-              <td>96.67%</td>
-              <td>92.18%</td>
-              <td>66.22%</td>
-            </tr>
-            <tr>
-              <td className="text-danger">Christina Allen</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-            </tr>
-            <tr>
-              <td className="text-danger">Samreen Ansari</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-            </tr>
-            <tr>
-              <td className="text-danger">Han Bao</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td className="table-primary">
-                <input type="text" className="form-control" value="88.03%" />
-              </td>
-              <td>98.99%</td>
-            </tr>
-            <tr>
-              <td className="text-danger">Mahi Sai Srinivas Bobbili</td>
-              <td>100%</td>
-              <td>96.67%</td>
-              <td>98.37%</td>
-              <td>99.15%</td>
-            </tr>
-            <tr>
-              <td className="text-danger">Siran Cao</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-              <td>100%</td>
-            </tr>
+            {enrollmentList.map((enrollmentItem) => { 
+              const user = users.find((userItem) => userItem._id === enrollmentItem.user);
+              return (
+                <tr key={enrollmentItem._id}>
+                  <td className="text-danger">{user?.firstName} {user?.lastName}</td>
+                  {assignmentList.map((assignmentItem) => { 
+                    const grade = grades.find(
+                      (gradeItem) => gradeItem.student === enrollmentItem.user && gradeItem.assignment === assignmentItem._id
+                    );
+                    return (
+                      <td key={assignmentItem._id}>
+                        {grade ? `${grade.grade}%` : ""}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

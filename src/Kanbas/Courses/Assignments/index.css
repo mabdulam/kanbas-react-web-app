@@ -2,6 +2,24 @@
     border-left: 3px solid green !important;
     background-color: white !important;
   }
+
+  .text-danger {
+    color: red;
+  }
+  
+  .custom-textarea {
+    white-space: pre-wrap;
+  }
+  
+  .custom-placeholder::placeholder {
+    color: #6c757d;
+  }
+  
+  .custom-placeholder {
+    white-space: pre-wrap;
+  }
+  
+  
   
   
   
