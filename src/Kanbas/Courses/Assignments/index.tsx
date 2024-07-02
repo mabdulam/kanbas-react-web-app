@@ -1,3 +1,7 @@
+// Assignments.tsx
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
 import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtonsTop from "./AssignmentControlButtonsTop";
 import AssignmentControlButtons from "./AssignmentControlButtons";
@@ -5,17 +9,30 @@ import SearchBar from "./SearchBar";
 import { BsGripVertical } from "react-icons/bs";
 import { SlNote } from "react-icons/sl";
 import "./index.css";
-import { useParams } from "react-router";
-import * as db from "../../Database";
+import { deleteAssignment, selectAssignmentsByCourse } from "./reducer";
 
 export default function Assignments() {
-  const { cid } = useParams();
-  const assignments = db.assignments.filter(assignment => assignment.course === cid);
+  const { cid } = useParams<{ cid: string }>();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const assignments = useSelector((state: any) => selectAssignmentsByCourse(state, cid || ""));
+
+  useEffect(() => {
+    console.log("Assignments updated:", assignments);
+  }, [assignments]);
+
+  const handleDeleteAssignment = (assignmentId: string) => {
+    if (window.confirm("Are you sure you want to remove this assignment?")) {
+      dispatch(deleteAssignment(assignmentId));
+    }
+  };
+
   return (
     <div className="p-3">
       <div className="d-flex justify-content-between align-items-center">
         <SearchBar />
-        <AssignmentsControls />
+        <AssignmentsControls onAddAssignment={() => navigate(`/Kanbas/Courses/${cid}/Assignments/new`)} />
       </div>
       <ul id="wd-assignments" className="list-group rounded-0 mt-3">
         <li className="wd-assignment list-group-item p-0 mb-3 border-0">
@@ -27,21 +44,26 @@ export default function Assignments() {
             <AssignmentControlButtonsTop />
           </div>
           <ul className="list-group rounded-0">
-            {assignments.map((assignment) => (
+            {assignments.map((assignment: any) => (
               <li key={assignment._id} className="wd-assignment list-group-item d-flex align-items-start p-3 wd-assignment-green-border">
                 <div className="d-flex align-items-center me-2">
                   <BsGripVertical className="fs-4 me-2" />
                   <SlNote className="fs-4 me-2" style={{ color: 'green' }} />
                 </div>
                 <div className="flex-grow-1">
-                  <a className="wd-assignment-link d-block" href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                  <a
+                    className="wd-assignment-link d-block"
+                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                    style={{ color: 'black', textDecoration: 'none' }}
+                    onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`)}
+                  >
                     <strong>{assignment.title}</strong>
                   </a>
                   <div className="small text-muted">
                     <span className="text-danger">Multiple Modules</span> | <strong>Not available until</strong> {assignment.available_date} <span>at</span> {assignment.available_time} | <strong>Due</strong> {assignment.due_date} <span>at</span> {assignment.due_time} | {assignment.pts} pts
                   </div>
                 </div>
-                <AssignmentControlButtons />
+                <AssignmentControlButtons _id={assignment._id} deleteAssignment={handleDeleteAssignment} />
               </li>
             ))}
           </ul>
@@ -50,6 +72,13 @@ export default function Assignments() {
     </div>
   );
 }
+
+
+
+
+
+
+
 
 
 
