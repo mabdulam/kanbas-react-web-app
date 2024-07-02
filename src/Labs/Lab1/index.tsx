@@ -286,7 +286,7 @@ tag to tell browsers to render the gaps.
       to get dummy text<br/>
 
       Checkout my
-      <a id="wd-github" href="https://github.com/mabdulam/kanbas-react-web-app/tree/a1">Github</a>
+      <a id="wd-github" href="https://github.com/mabdulam/kanbas-react-web-app/tree/a4">Github</a>
       <br/>
 
     </div>
