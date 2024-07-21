@@ -1,4 +1,3 @@
-// Assignments.tsx
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,7 +8,8 @@ import SearchBar from "./SearchBar";
 import { BsGripVertical } from "react-icons/bs";
 import { SlNote } from "react-icons/sl";
 import "./index.css";
-import { deleteAssignment, selectAssignmentsByCourse } from "./reducer";
+import { deleteAssignment, selectAssignmentsByCourse, setAssignments } from "./reducer";
+import { findAssignmentsForCourse, deleteAssignment as apiDeleteAssignment } from "./client";
 
 export default function Assignments() {
   const { cid } = useParams<{ cid: string }>();
@@ -19,11 +19,20 @@ export default function Assignments() {
   const assignments = useSelector((state: any) => selectAssignmentsByCourse(state, cid || ""));
 
   useEffect(() => {
+    const fetchAssignments = async () => {
+      const assignments = await findAssignmentsForCourse(cid || "");
+      dispatch(setAssignments(assignments));
+    };
+    fetchAssignments();
+  }, [cid, dispatch]);
+
+  useEffect(() => {
     console.log("Assignments updated:", assignments);
   }, [assignments]);
 
-  const handleDeleteAssignment = (assignmentId: string) => {
+  const handleDeleteAssignment = async (assignmentId: string) => {
     if (window.confirm("Are you sure you want to remove this assignment?")) {
+      await apiDeleteAssignment(assignmentId);
       dispatch(deleteAssignment(assignmentId));
     }
   };
@@ -72,6 +81,10 @@ export default function Assignments() {
     </div>
   );
 }
+
+
+
+
 
 
 

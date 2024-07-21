@@ -1,8 +1,21 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
-import { assignments } from "../../Database";
+
+type Assignment = {
+  _id: string;
+  course: string;
+  title: string;
+  description: string;
+  pts: number;
+  due_date: string;
+  due_time: string;
+  available_date: string;
+  available_time: string;
+  until_date: string;
+  until_time: string;
+};
 
 const initialState = {
-  assignments: assignments,
+  assignments: [] as Assignment[],
   assignment: {
     _id: "",
     course: "AA123",
@@ -15,37 +28,36 @@ const initialState = {
     available_time: "",
     until_date: "",
     until_time: "",
-  },
+  } as Assignment,
 };
 
 const assignmentsSlice = createSlice({
   name: "assignments",
   initialState,
   reducers: {
-    addAssignment: (state, action: PayloadAction<typeof initialState.assignment>) => {
-      const ids = state.assignments.map(a => parseInt(a._id.slice(1))).filter(id => !isNaN(id));
-      const maxId = Math.max(...ids, 0);
-      const newId = `A${maxId + 1}`;
-      const newAssignment = { ...action.payload, _id: newId };
-      console.log("Adding new assignment:", newAssignment); // Debug log
-      state.assignments.push(newAssignment);
+    setAssignments: (state, action: PayloadAction<Assignment[]>) => {
+      state.assignments = action.payload;
+    },
+    setAssignment: (state, action: PayloadAction<Assignment>) => {
+      state.assignment = action.payload;
+    },
+    addAssignment: (state, action: PayloadAction<Assignment>) => {
+      console.log("Adding assignment:", action.payload);
+      state.assignments.push(action.payload);
+      console.log("Assignments:", state.assignments);
     },
     deleteAssignment: (state, action: PayloadAction<string>) => {
       state.assignments = state.assignments.filter(
         assignment => assignment._id !== action.payload
       );
     },
-    updateAssignment: (state, action: PayloadAction<typeof initialState.assignment>) => {
-      console.log("Updating assignment:", action.payload); // Debug log
+    updateAssignment: (state, action: PayloadAction<Assignment>) => {
       const index = state.assignments.findIndex(a => a._id === action.payload._id);
       if (index !== -1) {
         state.assignments[index] = action.payload;
       } else {
         state.assignments.push(action.payload);
       }
-    },
-    setAssignment: (state, action: PayloadAction<typeof initialState.assignment>) => {
-      state.assignment = action.payload;
     },
   },
 });
@@ -55,13 +67,12 @@ const selectAssignments = (state: any) => state.assignmentsReducer.assignments;
 export const selectAssignmentsByCourse = createSelector(
   [selectAssignments, (state: any, cid: string) => cid],
   (assignments, cid) => {
-    const filteredAssignments = assignments.filter((assignment: any) => assignment.course === cid);
-    console.log("Filtered assignments for course", cid, filteredAssignments); // Debug log
-    return filteredAssignments;
+    return assignments.filter((assignment: Assignment) => assignment.course === cid);
   }
 );
 
 export const {
+  setAssignments,
   addAssignment,
   deleteAssignment,
   updateAssignment,
@@ -69,6 +80,13 @@ export const {
 } = assignmentsSlice.actions;
 
 export default assignmentsSlice.reducer;
+
+
+
+
+
+
+
 
 
 

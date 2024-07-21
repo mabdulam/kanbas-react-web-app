@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import * as client from './client';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import { createAssignment, updateAssignment as apiUpdateAssignment } from "./client";
 import "./index.css";
 
 export default function AssignmentEditor() {
@@ -38,9 +39,9 @@ export default function AssignmentEditor() {
     }
   }, [aid, assignment]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const updatedAssignment = {
-      _id: aid || 'new',
+      _id: aid || '',
       course: cid || "",
       title,
       description,
@@ -54,15 +55,31 @@ export default function AssignmentEditor() {
     };
 
     if (aid) {
-      console.log("Dispatching updateAssignment with:", updatedAssignment);
+      await apiUpdateAssignment(updatedAssignment);
       dispatch(updateAssignment(updatedAssignment));
     } else {
-      console.log("Dispatching addAssignment with:", updatedAssignment);
-      dispatch(addAssignment(updatedAssignment));
+      const newAssignment = await createAssignment(cid, updatedAssignment);
+      console.log("New Assignment:", newAssignment);
+      dispatch(addAssignment(newAssignment));
     }
 
     navigate(`/Kanbas/Courses/${cid}/Assignments`);
+    console.log("Assignment Saved:", updatedAssignment);
   };
+
+  // const handleSave = () => {
+  //   if (aid) {
+  //     client.updateAssignment(assignment).then((updatedAssignment) => {
+  //       dispatch(updateAssignment(updatedAssignment));
+  //       navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  //     });
+  //   } else {
+  //     client.createAssignment(cid as string, assignment).then((newAssignment) => {
+  //       dispatch(addAssignment(newAssignment));
+  //       navigate(`/Kanbas/Courses/${cid}/Assignments`);
+  //     });
+  //   }
+  // };
 
   return (
     <div id="wd-assignments-editor" className="container mt-4">
@@ -206,6 +223,12 @@ export default function AssignmentEditor() {
     </div>
   );
 }
+
+
+
+
+
+
 
 
 
