@@ -5,7 +5,7 @@ import { IQuiz, IQuestion } from "../../client";
 import * as client from "../../client";
 import { addQuestion, deleteQuestion, updateQuestion, setQuestion, setQuestions } from "../reducer"
 import { QuizState } from "../../../../store";
-import { FaPencilAlt, FaPlus, FaSave, FaSearch, FaTrash } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import "../../index.css"
 
 export default function QuizEditor({quizData, setParentQuiz}: {quizData: IQuiz, setParentQuiz: any}) {
@@ -288,7 +288,7 @@ export default function QuizEditor({quizData, setParentQuiz}: {quizData: IQuiz, 
             )}
             {activeTab === 'questions' && (
                 <div>
-                    <button className="btn btn-primary" onClick={handleNewQuestion}>
+                    <button className="btn btn-primary mt-2 mb-2" onClick={handleNewQuestion}>
                         <FaPlus /> Question
                     </button>
                     {questions.length === 0 && (
@@ -328,13 +328,13 @@ export default function QuizEditor({quizData, setParentQuiz}: {quizData: IQuiz, 
                                             className="btn btn-secondary" 
                                             style={{marginTop: '5px'}}
                                             onClick={ () => handleUpdateQuestion(question)}>
-                                            <FaPencilAlt /> Edit
+                                            Edit
                                         </button>
                                         <button 
-                                            className="btn btn-danger" 
+                                            className="btn btn-danger ms-2" 
                                             style={{marginTop: '5px'}}
                                             onClick={() => handleDeleteQuestion(question)}>
-                                            <FaTrash /> Delete
+                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -347,14 +347,14 @@ export default function QuizEditor({quizData, setParentQuiz}: {quizData: IQuiz, 
             <div className="row btn-row">
                 <div className="col">
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-danger me-2"
                         onClick={handleSave}>
-                        <FaSave /> Save
+                        Save
                     </button>
                     <button
                         className="btn btn-secondary"
                         onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Preview`)}>
-                        <FaSearch /> Preview
+                        Preview
                     </button>
                 </div>
             </div>

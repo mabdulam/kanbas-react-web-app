@@ -91,7 +91,7 @@ export default function QuizList() {
     return(
         <div className="container">
             <h1>Quizzes</h1>
-            <button className="btn btn-primary" onClick={handleNewQuiz}>
+            <button className="btn btn-primary mb-2" onClick={handleNewQuiz}>
                 <FaPlus /> Quiz
             </button>
             {quizzesExist ? (
