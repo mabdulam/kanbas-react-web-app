@@ -42,11 +42,11 @@ export default function QuizDetails({quiz}: {quiz: IQuiz}) {
                             <FaBan/> Unpublish
                         </button>
                     ) : (
-                        <button className="btn btn-info me-2" onClick={() => handlePublishQuiz(quiz)}>
+                        <button className="btn btn-success me-2" onClick={() => handlePublishQuiz(quiz)}>
                             <FaCheckCircle /> Publish
                         </button>
                     )}
-                    <button className="btn btn-success" onClick={() => handleEditQuiz(quiz)}><FaPencilAlt/> Edit</button>
+                    <button className="btn btn-warning" onClick={() => handleEditQuiz(quiz)}><FaPencilAlt/> Edit</button>
                 </div>
             </div>
             <div className="row">
@@ -234,14 +234,14 @@ export default function QuizDetails({quiz}: {quiz: IQuiz}) {
             <div className="row btn-row">
                 <div className="col">
                     <button
-                        className="btn btn-primary"
+                        className="btn btn-danger me-2"
                         onClick={handleSave}>
-                        <FaSave /> Save
+                        Save
                     </button>
                     <button
                         className="btn btn-secondary"
                         onClick={() => navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Preview`)}>
-                        <FaSearch /> Preview
+                        Preview
                     </button>
                 </div>
             </div>
